@@ -1,8 +1,8 @@
-<p align="center">React Native Calendar 🗓️<p>
+<p align="center">🗓️ React Native Calendar component library 🗓️<p>
 
 ---
 
-⚠️ Base structure referes to [react-native-calendars](https://github.com/wix/react-native-calendars)
+⚠️ Implementation based on [react-native-calendars](https://github.com/wix/react-native-calendars)
 
 ## Getting Started
 

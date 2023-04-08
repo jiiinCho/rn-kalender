@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "rn-calendar": ["src/index"]
+      "rn-kalender": ["src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
