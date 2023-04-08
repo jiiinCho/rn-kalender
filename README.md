@@ -2,7 +2,7 @@
 
 ---
 
-⚠️ Implementation based on [react-native-calendars](https://github.com/wix/react-native-calendars)
+⚠️ Infrastructure based on [react-native-calendars](https://github.com/wix/react-native-calendars)
 
 ## Getting Started
 
