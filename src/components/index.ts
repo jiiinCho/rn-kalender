@@ -1,7 +1,7 @@
 export type { CalendarProps } from './Calendar';
 export { Calendar } from './Calendar';
 
-export type { CalendarHeaderProps, CalendarHeaderRefType } from './CalendarHeader';
+export type { CalendarHeaderProps } from './CalendarHeader';
 export { CalendarHeader } from './CalendarHeader';
 
 export type { CalendarListRefType, CalendarListProps } from './CalendarList';

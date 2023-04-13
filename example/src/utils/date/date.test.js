@@ -1,4 +1,3 @@
-import XDate from 'xdate';
 import {
   getAllDaysInMonth,
   isValidDateType,

@@ -1,5 +1,6 @@
-import { formatDay, formatMonth, formatUTCDate } from './format';
 import en from 'date-fns/locale/en-GB';
+
+import { formatDay, formatMonth, formatUTCDate } from './format';
 
 describe('format', () => {
   it('format days in swedish locale by default', () => {

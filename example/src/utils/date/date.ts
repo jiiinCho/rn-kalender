@@ -1,6 +1,6 @@
 import { differenceInMonths } from 'date-fns';
 
-import XDate from 'xdate';
+import { formatDay } from '../format';
 
 export function isValidDateType(date: any): date is Date {
   return !!date && typeof date === 'string' && !isNaN(Date.parse(date));
@@ -147,22 +147,12 @@ export function startOfMonth(source: Date) {
   return date;
 }
 
-// TODO: REMOVE
-type locale_detail = {
-  monthNames?: string[] | undefined;
-  monthNamesShort?: string[] | undefined;
-  dayNames?: string[] | undefined;
-  dayNamesShort?: string[] | undefined;
-  amDesignator?: string | undefined;
-  pmDesignator?: string | undefined;
-};
+export function weekDayNames(firstDayOfWeek = 0, locale: Locale) {
+  const Sunday = new Date('2023-04-02');
+  const Saturday = new Date('2023-04-08');
+  const Week = fromTo(Sunday, Saturday);
 
-export function getLocale(): locale_detail {
-  return XDate.locales[XDate.defaultLocale];
-}
-
-export function weekDayNames(firstDayOfWeek = 0) {
-  let weekDaysNames = getLocale().dayNamesShort;
+  let weekDaysNames = Week.map((date) => formatDay(date, { pattern: 'EEE', locale }));
   const dayShift = firstDayOfWeek % 7;
 
   if (!!dayShift && weekDaysNames) {

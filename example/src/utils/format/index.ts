@@ -1,1 +1,1 @@
-export { formatDay, formatMonth, toMarkingFormat } from './format';
+export { formatDay, formatMonth, toMarkingFormat, formatAccessbilityDate } from './format';

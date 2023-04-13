@@ -1,19 +1,12 @@
 import * as React from 'react';
-import { StyleProp, ViewStyle, View } from 'react-native';
-import { addMonths, parseISO } from 'date-fns';
+import { StyleProp, ViewStyle, View, ScrollView } from 'react-native';
 
-import GestureRecognizer from 'react-native-swipe-gestures';
+import { addMonths } from 'date-fns';
+import sv from 'date-fns/locale/sv';
 
 import styles from './styles';
-import {
-  Day,
-  DayProps,
-  CalendarHeader,
-  CalendarHeaderProps,
-  CalendarHeaderRefType,
-} from '../index';
-import { settings, Theme, _BlockedMarking, _DotMarking, _PeriodMarking } from '../../consts';
-import { useDidUpdate } from '../../hooks';
+import type { Theme, _BlockedMarking, _DotMarking, _PeriodMarking } from '../../consts';
+import { useDidUpdate, useSwipe } from '../../hooks';
 import {
   extractHeaderProps,
   getState,
@@ -23,17 +16,13 @@ import {
   isSameMonth,
   isSameDate,
   isValidDateType,
+  toMarkingFormat,
+  formatAccessbilityDate,
 } from '../../utils';
-
-const swipeDirections = {
-  SWIPE_UP: 'SWIPE_UP',
-  SWIPE_DOWN: 'SWIPE_DOWN',
-  SWIPE_LEFT: 'SWIPE_LEFT',
-  SWIPE_RIGHT: 'SWIPE_RIGHT',
-};
+import { Day, DayProps, CalendarHeader, CalendarHeaderProps } from '../index';
 
 export interface CalendarProps
-  extends Omit<CalendarHeaderProps, 'month'>,
+  extends Omit<CalendarHeaderProps, 'month' | 'addMonth' | 'monthLocale'>,
     Omit<DayProps, 'date' | 'formattedDateStamp'> {
   /** Specify theme properties to override specific styles for calendar parts */
   theme?: Theme;
@@ -68,6 +57,7 @@ export interface CalendarProps
   blockedDates?: _BlockedMarking;
   dotDates?: _DotMarking[];
   periodDates?: _PeriodMarking;
+  locale?: Locale;
 }
 
 const Calendar = (props: CalendarProps) => {
@@ -95,6 +85,7 @@ const Calendar = (props: CalendarProps) => {
     testID,
     style: propsStyle,
     DayComponent,
+    locale = sv,
   } = props;
 
   const [currentMonth, setCurrentMonth] = React.useState<Date>(
@@ -102,7 +93,6 @@ const Calendar = (props: CalendarProps) => {
   );
 
   const style = React.useRef(styles(theme));
-  const header = React.useRef<CalendarHeaderRefType>(null);
 
   // Triggered when using <Calendar /> only
   useDidUpdate(() => {
@@ -128,18 +118,16 @@ const Calendar = (props: CalendarProps) => {
   );
 
   const handleDayInteraction = React.useCallback(
-    (date: string, interaction?: (date: string) => void) => {
-      const parsedDate = parseISO(date);
-
+    (date: Date, interaction?: (date: string) => void) => {
       if (
         allowSelectionOutOfRange ||
-        (!(minDate && !isGTE(parsedDate, new Date(minDate))) &&
-          !(maxDate && !isLTE(parsedDate, new Date(maxDate))))
+        (!(minDate && !isGTE(date, new Date(minDate))) &&
+          !(maxDate && !isLTE(date, new Date(maxDate))))
       ) {
         if (!disableMonthChange) {
-          updateMonth(parsedDate);
+          updateMonth(date);
         }
-        interaction?.(date);
+        interaction?.(toMarkingFormat(date));
       }
     },
     [minDate, maxDate, allowSelectionOutOfRange, disableMonthChange, updateMonth],
@@ -150,46 +138,23 @@ const Calendar = (props: CalendarProps) => {
       if (!date) {
         return;
       }
-      handleDayInteraction(date, onDayPress);
+      const selectedDate = new Date(currentMonth);
+      selectedDate.setUTCDate(Number(date));
+
+      handleDayInteraction(selectedDate, onDayPress);
     },
-    [handleDayInteraction, onDayPress],
+    [handleDayInteraction, currentMonth, onDayPress],
   );
 
   const _onDayLongPress = React.useCallback(
-    (date?: string) => {
+    (date?: Date) => {
       if (!date) {
         return;
       }
+
       handleDayInteraction(date, onDayLongPress);
     },
     [handleDayInteraction, onDayLongPress],
-  );
-
-  const onSwipeLeft = React.useCallback(() => {
-    header.current?.onPressRight();
-  }, [header]);
-
-  const onSwipeRight = React.useCallback(() => {
-    header.current?.onPressLeft();
-  }, [header]);
-
-  const onSwipe = React.useCallback(
-    (gestureName: string) => {
-      const { SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT } = swipeDirections;
-
-      switch (gestureName) {
-        case SWIPE_UP:
-        case SWIPE_DOWN:
-          break;
-        case SWIPE_LEFT:
-          settings.isRTL ? onSwipeRight() : onSwipeLeft();
-          break;
-        case SWIPE_RIGHT:
-          settings.isRTL ? onSwipeLeft() : onSwipeRight();
-          break;
-      }
-    },
-    [onSwipeLeft, onSwipeRight],
   );
 
   const renderDay = (day: Date, id: number) => {
@@ -207,7 +172,7 @@ const Calendar = (props: CalendarProps) => {
     return (
       <View style={style.current.dayContainer} key={id}>
         <Day
-          formattedDateStamp={day.toDateString()}
+          formattedDateStamp={formatAccessbilityDate(day, locale)}
           theme={theme}
           testID={`${testID}.day_${date}`}
           date={date < 10 ? `0${date}` : date}
@@ -225,6 +190,7 @@ const Calendar = (props: CalendarProps) => {
           })}
           {...(isBlockedDate && {
             blockedDate: {
+              isBlocked: true,
               backgroundColor: blockedDates?.backgroundColor,
               borderColor: blockedDates?.borderColor,
             },
@@ -277,33 +243,40 @@ const Calendar = (props: CalendarProps) => {
     return (
       <CalendarHeader
         {...headerProps}
+        monthLocale={locale}
         testID={`${testID}.header`}
         style={headerStyle}
         month={currentMonth}
         addMonth={addMonth}
         displayLoadingIndicator={displayLoadingIndicator}
-        ref={header}
       />
     );
   };
 
-  const GestureComponent = enableSwipeMonths ? GestureRecognizer : View;
-  const swipeProps = {
-    onSwipe: (direction: string) => onSwipe(direction),
+  const { onTouchStart, onTouchEnd } = useSwipe(
+    () => addMonth(1),
+    () => addMonth(-1),
+    6,
+  );
+
+  const GestureComponent = enableSwipeMonths ? ScrollView : View;
+  const scrollViewProps = {
+    onTouchStart,
+    onTouchEnd,
   };
 
   return (
-    <GestureComponent {...(enableSwipeMonths && swipeProps)}>
-      <View
-        style={[style.current.container, propsStyle]}
-        testID={testID}
-        accessibilityElementsHidden={accessibilityElementsHidden} // iOS
-        importantForAccessibility={importantForAccessibility} // Android
-      >
-        {renderHeader()}
+    <View
+      style={[style.current.container, propsStyle]}
+      testID={testID}
+      accessibilityElementsHidden={accessibilityElementsHidden} // iOS
+      importantForAccessibility={importantForAccessibility} // Android
+    >
+      {renderHeader()}
+      <GestureComponent {...(enableSwipeMonths && scrollViewProps)}>
         {renderMonth()}
-      </View>
-    </GestureComponent>
+      </GestureComponent>
+    </View>
   );
 };
 

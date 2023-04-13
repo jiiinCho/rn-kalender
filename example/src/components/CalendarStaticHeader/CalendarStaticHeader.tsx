@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { View, Text, StyleProp, ViewStyle } from 'react-native';
 
-import { includes } from 'lodash';
 import type { Locale } from 'date-fns';
+import sv from 'date-fns/locale/sv';
+import { includes } from 'lodash';
 
+import styles from './styles';
 import type { Theme } from '../../consts';
 import { weekDayNames } from '../../utils';
-import styles from './styles';
 
 export interface CalendarStaticHeaderProps {
   theme?: Theme;
@@ -25,7 +26,6 @@ export interface CalendarStaticHeaderProps {
   accessibilityElementsHidden?: boolean;
   /** Android, to avoid confusion for accessibility service in case overlapping UI components with the same parent. Default auto */
   importantForAccessibility?: 'auto' | 'yes' | 'no' | 'no-hide-descendants';
-  /** The current date presented */
 }
 
 const CalendarStaticHeader = ({
@@ -36,18 +36,17 @@ const CalendarStaticHeader = ({
   testID,
   accessibilityElementsHidden,
   importantForAccessibility,
+  headerDayLocale = sv,
 }: CalendarStaticHeaderProps) => {
   const style = React.useRef(styles(theme));
-
   const renderWeekDays = React.useMemo(() => {
-    const weekDaysNames = weekDayNames(firstDay);
-
+    const weekDaysNames = weekDayNames(firstDay, headerDayLocale);
     if (!weekDaysNames) {
       return null;
     }
 
     return weekDaysNames.map((day: string, index: number) => {
-      const dayStyle = [];
+      const dayStyle = [] as any;
       dayStyle.push(style.current.dayHeader);
 
       if (includes(disabledDaysIndexes, index)) {
@@ -66,7 +65,7 @@ const CalendarStaticHeader = ({
         </Text>
       );
     });
-  }, [disabledDaysIndexes, firstDay]);
+  }, [disabledDaysIndexes, firstDay, headerDayLocale]);
 
   return (
     <View

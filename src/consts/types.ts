@@ -16,7 +16,6 @@ export interface Theme {
   dayTextColor?: string;
 
   todayBorderColor?: string;
-  todayBackgroundColor?: string;
   todayTextColor?: string;
 
   periodBackgroundColor?: string;

@@ -30,3 +30,7 @@ export function formatUTCDate(source: number | Date): string {
 export function toMarkingFormat(date: Date) {
   return date.toISOString().split('T')[0];
 }
+
+export function formatAccessbilityDate(date: Date, locale?: Locale) {
+  return format(date, 'EEEE dd MMMM yyyy', { locale });
+}

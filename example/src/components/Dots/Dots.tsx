@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { View } from 'react-native';
 
-import type { Theme, DOT } from '../../consts';
 import styles from './styles';
+import type { Theme, DOT } from '../../consts';
 
 export interface DotsProps {
   dots: DOT[];

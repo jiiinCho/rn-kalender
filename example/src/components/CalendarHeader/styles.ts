@@ -43,6 +43,9 @@ export default function styles(theme: Theme = {}) {
       padding: 12,
       paddingHorizontal: 16,
     },
+    arrowSpacing: {
+      marginLeft: 8,
+    },
     arrowImage: {
       ...rtlStyle,
       tintColor: appStyle.arrowColor,

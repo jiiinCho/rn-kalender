@@ -6,3 +6,6 @@ lib/
 
 # babel files
 src/babel
+
+# example
+example/

@@ -1,5 +1,4 @@
 export {
-  getLocale,
   weekDayNames,
   startOfMonth,
   isGTE,

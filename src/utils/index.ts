@@ -1,5 +1,4 @@
 export {
-  getLocale,
   weekDayNames,
   startOfMonth,
   isGTE,
@@ -12,7 +11,7 @@ export {
   isDateNotInRange,
   fromTo,
 } from './date';
-export { formatDay, formatMonth, toMarkingFormat } from './format';
+export { formatDay, formatMonth, toMarkingFormat, formatAccessbilityDate } from './format';
 export { extractHeaderProps, extractCalendarProps, extractStaticHeaderProps } from './extractProps';
 export { forwardRef } from './forwardRef';
 export { getMarkingAccessibilityLabel } from './getMarkingAccessibilityLabel';

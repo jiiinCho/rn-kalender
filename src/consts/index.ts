@@ -15,4 +15,3 @@ export type {
   _PeriodMarking,
   Marking,
 } from './types';
-export { default as WeekDaysNames } from './WeekDaysNames';

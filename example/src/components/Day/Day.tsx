@@ -1,18 +1,17 @@
 import * as React from 'react';
-
 import { Text, TouchableOpacity } from 'react-native';
 import type { ViewProps } from 'react-native';
 
 import { omit, some, isEqual } from 'lodash';
 
-import { Dots } from '../index';
-import { getMarkingAccessibilityLabel } from '../../utils';
-import type { DayState, Theme, BlockedMarking, PeriodMarking, Marking, DOT } from '../../consts';
 import styles from './styles';
+import type { DayState, Theme, BlockedMarking, PeriodMarking, Marking, DOT } from '../../consts';
+import { getMarkingAccessibilityLabel } from '../../utils';
+import { Dots } from '../index';
 
 export interface DayProps extends ViewProps {
   state?: DayState;
-  blockedDate?: Pick<BlockedMarking, 'borderColor' | 'backgroundColor'>;
+  blockedDate?: Pick<BlockedMarking, 'borderColor' | 'backgroundColor'> & { isBlocked: true };
   dotDate?: DOT[];
   periodDate?: Pick<PeriodMarking, 'borderColor' | 'backgroundColor'> & {
     start: boolean;
@@ -107,7 +106,7 @@ const Day = React.memo(
         }
       }
 
-      if (blockedDate) {
+      if (blockedDate?.isBlocked) {
         containerStyle.push(style.current.blocked);
         if (blockedDate.backgroundColor) {
           containerStyle.push({
@@ -137,7 +136,7 @@ const Day = React.memo(
         textStyle.push(style.current.todayText);
       }
 
-      if (blockedDate) {
+      if (blockedDate?.isBlocked) {
         textStyle.push(style.current.blockedText);
       }
 
@@ -153,18 +152,18 @@ const Day = React.memo(
     }, [onLongPress, date]);
 
     const getAccessibilityLabel = React.useMemo(() => {
-      const prefix = isToday ? 'today' : '';
+      const prefix = isToday ? 'today ' : '';
       const markingAccessibilityLabel = getMarkingAccessibilityLabel({
         accessibilityLabel: marking?.accessibilityLabel,
         isSelected,
         isStartDay: !!periodDate?.start,
         isEndDay: !!periodDate?.end,
         isPeriod: !!periodDate?.start && !!periodDate?.end,
-        isBlocked: !!blockedDate,
+        isBlocked: !!blockedDate?.isBlocked,
         isDisabled: isDisabled || !!marking?.disableTouchEvent,
       });
 
-      return `${prefix} ${formattedDateStamp} ${markingAccessibilityLabel}`;
+      return `${prefix}${formattedDateStamp}${markingAccessibilityLabel}`;
     }, [
       blockedDate,
       formattedDateStamp,

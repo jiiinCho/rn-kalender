@@ -3,10 +3,10 @@ import { Text } from 'react-native';
 
 import { addMonths, subMonths } from 'date-fns';
 
-import { Calendar, CalendarProps } from '../index';
+import styles from './styles';
 import type { Theme } from '../../consts';
 import { toMarkingFormat, extractCalendarProps } from '../../utils';
-import styles from './styles';
+import { Calendar, CalendarProps } from '../index';
 
 export type CalendarListItemProps = CalendarProps & {
   item: Date;

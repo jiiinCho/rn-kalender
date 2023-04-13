@@ -15,7 +15,7 @@ const palette = {
     dark: '#a7a7a7',
     regular: '#c0c0c0',
     light: '#D9D9D9',
-    diminish: '#F4F4F4',
+    faded: '#F4F4F4',
   },
   black: '#242324',
   white: '#FFF',
@@ -55,7 +55,7 @@ export const defaultTheme: Theme = {
   textInactiveColor: palette.grey.regular,
   monthTextColor: palette.black,
 
-  disabledBorderColor: palette.grey.diminish,
+  disabledBorderColor: palette.grey.faded,
   disabledTextColor: palette.grey.regular,
 
   calendarBackground: palette.white,
@@ -64,14 +64,13 @@ export const defaultTheme: Theme = {
   selectedDayTextColor: palette.white,
   dayTextColor: palette.black,
 
-  todayBackgroundColor: palette.primary.faded,
   todayBorderColor: palette.primary.default,
   todayTextColor: palette.primary.default,
 
   periodBackgroundColor: palette.primary.faded,
   periodBorderColor: palette.primary.default,
 
-  blockedBackgroundColor: palette.grey.diminish,
+  blockedBackgroundColor: palette.grey.faded,
   blockedTextColor: palette.grey.regular,
 
   arrowColor: palette.grey.regular,

@@ -42,7 +42,7 @@ export interface CalendarListProps
 }
 
 const CALENDAR_WIDTH = settings.screenWidth;
-const CALENDAR_HEIGHT = 560;
+const CALENDAR_HEIGHT = 540;
 const PAST_SCROLL_RANGE = 6;
 const FUTURE_SCROLL_RANGE = 6;
 
@@ -99,6 +99,7 @@ const CalendarList = forwardRef<CalendarListImperativeMethods, Props>(
       /** FlatList props */
       onEndReachedThreshold,
       onEndReached,
+      locale,
     } = props;
 
     const initialDate = React.useRef<Date>(
@@ -109,7 +110,6 @@ const CalendarList = forwardRef<CalendarListImperativeMethods, Props>(
 
     const calendarProps = extractCalendarProps(props);
     const calendarSize = horizontal ? calendarWidth : calendarHeight;
-
     const visibleMonth = React.useRef(currentMonth);
 
     const style = React.useRef(styleConstructor(theme));
@@ -136,7 +136,8 @@ const CalendarList = forwardRef<CalendarListImperativeMethods, Props>(
       return months;
     }, [pastScrollRange, futureScrollRange, initialDate]);
 
-    const [calendarMonths, setCalenderMonths] = React.useState<FlatListItem[]>(items);
+    // TODO: [feat] add months on refresh
+    // const [calendarMonths, setCalenderMonths] = React.useState<FlatListItem[]>(items);
 
     const initialDateIndex = React.useMemo<number>(() => {
       return findIndex(items, function ({ month }) {
@@ -155,6 +156,7 @@ const CalendarList = forwardRef<CalendarListImperativeMethods, Props>(
           {...headerProps}
           testID={`${testID}.staticHeader`}
           style={staticHeaderStyle}
+          headerDayLocale={locale}
           accessibilityElementsHidden={true} // iOS
           importantForAccessibility={'no-hide-descendants'} // Android
         />
@@ -206,10 +208,8 @@ const CalendarList = forwardRef<CalendarListImperativeMethods, Props>(
       }
     }, [current, scrollToMonth]);
 
-    // update prop callbacks
     useDidUpdate(() => {
-      // @ts-ignore TODO: FIX
-      onVisibleMonthsChange?.([currentMonth]);
+      onVisibleMonthsChange?.(currentMonth);
     }, [currentMonth]);
 
     const getItemLayout = React.useCallback(
@@ -359,8 +359,8 @@ const CalendarList = forwardRef<CalendarListImperativeMethods, Props>(
       },
     ]);
 
-    const [loading, setLoading] = React.useState(false);
-
+    // TODO: [feat] add months on refresh
+    // const [loading, setLoading] = React.useState(false);
     return (
       <View testID={testID}>
         <FlatList
@@ -368,8 +368,7 @@ const CalendarList = forwardRef<CalendarListImperativeMethods, Props>(
           style={listStyle}
           showsVerticalScrollIndicator={showScrollIndicator}
           showsHorizontalScrollIndicator={showScrollIndicator}
-          data={calendarMonths}
-          extraData={calendarMonths}
+          data={items}
           renderItem={renderItem}
           getItemLayout={getItemLayout}
           initialNumToRender={range.current}
@@ -391,35 +390,35 @@ const CalendarList = forwardRef<CalendarListImperativeMethods, Props>(
           onMomentumScrollEnd={onMomentumScrollEnd}
           onScrollBeginDrag={onScrollBeginDrag}
           onScrollEndDrag={onScrollEndDrag}
-          onRefresh={() => {
-            setLoading(true);
-            const currentMontClone = new Date(currentMonth);
-            setCalenderMonths((previousMonths) => {
-              const initialMonthItem = previousMonths[0].month;
-              const initialMonth = initialMonthItem.getUTCMonth();
+          // onRefresh={() => {
+          //   setLoading(true);
+          //   const currentMontClone = new Date(currentMonth);
+          //   setCalenderMonths((previousMonths) => {
+          //     const initialMonthItem = previousMonths[0].month;
+          //     const initialMonth = initialMonthItem.getUTCMonth();
 
-              const m1 = new Date(initialMonthItem);
-              const m2 = new Date(initialMonthItem);
-              const m3 = new Date(initialMonthItem);
-              m1.setUTCMonth(initialMonth - 1);
-              m2.setUTCMonth(initialMonth - 2);
-              m3.setUTCMonth(initialMonth - 3);
+          //     const m1 = new Date(initialMonthItem);
+          //     const m2 = new Date(initialMonthItem);
+          //     const m3 = new Date(initialMonthItem);
+          //     m1.setUTCMonth(initialMonth - 1);
+          //     m2.setUTCMonth(initialMonth - 2);
+          //     m3.setUTCMonth(initialMonth - 3);
 
-              const updated1: FlatListItem = { month: m1, key: m1.getTime().toString() };
-              const updated2: FlatListItem = { month: m2, key: m2.getTime().toString() };
-              const updated3: FlatListItem = { month: m3, key: m3.getTime().toString() };
-              return [updated3, updated2, updated1, ...previousMonths];
-            });
+          //     const updated1: FlatListItem = { month: m1, key: m1.getTime().toString() };
+          //     const updated2: FlatListItem = { month: m2, key: m2.getTime().toString() };
+          //     const updated3: FlatListItem = { month: m3, key: m3.getTime().toString() };
+          //     return [updated3, updated2, updated1, ...previousMonths];
+          //   });
 
-            const scrollAmount = calendarSize * pastScrollRange + -3 * calendarSize;
-            list.current?.scrollToOffset({ offset: scrollAmount, animated: false });
+          //   const scrollAmount = calendarSize * pastScrollRange + -3 * calendarSize;
+          //   list.current?.scrollToOffset({ offset: scrollAmount, animated: false });
 
-            visibleMonth.current = currentMontClone; // update ref value
-            setCurrentMonth(visibleMonth.current); // re-render?
+          //   visibleMonth.current = currentMontClone; // update ref value
+          //   setCurrentMonth(visibleMonth.current); // re-render?
 
-            setLoading(false);
-          }}
-          refreshing={loading}
+          //   setLoading(false);
+          // }}
+          // refreshing={loading}
         />
         {renderStaticHeader()}
       </View>

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import sv from 'date-fns/locale/sv';
+
 import { CalendarList, CalendarListProps, Calendar } from './components';
 import type {
   BlockedMarking,
@@ -9,7 +11,7 @@ import type {
   PeriodMarking,
   _PeriodMarking,
 } from './consts';
-import { fromTo, isValidDateType, printInvalidErrorLog } from './utils';
+import { extractCalendarProps, fromTo, isValidDateType, printInvalidErrorLog } from './utils';
 
 interface KalenderProps
   extends Omit<
@@ -22,12 +24,13 @@ interface KalenderProps
   periodDates?: PeriodMarking;
 }
 
-const Kalender = ({
+export const Kalender = ({
   isList,
   blockedDates,
   dotDates,
   periodDates,
   current,
+  locale = sv,
   ...rest
 }: KalenderProps) => {
   const validPeriodDates = React.useMemo<_PeriodMarking | undefined>(() => {
@@ -104,18 +107,21 @@ const Kalender = ({
         blockedDates={validBlockDates}
         dotDates={validDotDates}
         periodDates={validPeriodDates}
+        locale={locale}
         {...rest}
       />
     );
   } else {
+    const calendarProps = extractCalendarProps(rest);
     return (
       <Calendar
         blockedDates={validBlockDates}
         dotDates={validDotDates}
         periodDates={validPeriodDates}
+        locale={locale}
+        current={current}
+        {...calendarProps}
       />
     );
   }
 };
-
-export default Kalender;

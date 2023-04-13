@@ -3,7 +3,6 @@ import type { CalendarProps, CalendarStaticHeaderProps, CalendarListProps } from
 
 export function extractHeaderProps(props: CalendarProps) {
   const {
-    addMonth,
     theme,
     firstDay,
     displayLoadingIndicator,
@@ -23,7 +22,6 @@ export function extractHeaderProps(props: CalendarProps) {
   } = props;
 
   const headerProps = {
-    addMonth,
     theme,
     firstDay,
     displayLoadingIndicator,

@@ -18,27 +18,27 @@ export const getMarkingAccessibilityLabel = (options: LabelOptions) => {
 
   let label = '';
   if (isSelected) {
-    label += 'selected ';
+    label += ' selected ';
   }
 
   if (isStartDay) {
-    label += 'period start ';
+    label += ' period start';
   }
 
   if (isEndDay) {
-    label += 'period end ';
+    label += ' period end';
   }
 
   if (isPeriod) {
-    label += 'period ';
+    label += ' period';
   }
 
   if (isBlocked) {
-    label += 'blocked ';
+    label += ' blocked';
   }
 
   if (isDisabled) {
-    label += 'disabled ';
+    label += ' disabled';
   }
 
   return label;

@@ -13,6 +13,8 @@ const isTablet =
   (Platform as PlatformIOSStatic).isPad ||
   (screenAspectRatio < 1.6 && Math.max(screenWidth, screenHeight) >= 900);
 
+const isPortrait = screenWidth < screenHeight ? true : false;
+
 export const settings = {
   screenWidth,
   screenHeight,
@@ -20,4 +22,5 @@ export const settings = {
   isAndroid,
   isIOS,
   isTablet,
+  isPortrait,
 };
