@@ -1,19 +1,23 @@
-# rn-kalender 📆
+# 📆 rn-kalender 
 
 [![npm version](https://badge.fury.io/js/rn-kalender.svg)](https://badge.fury.io/js/rn-kalender)
 
-A simple React Native calendar marking component for iOS and Android
+React Native calendar marking component for iOS and Android <br>
 
-⚠️ Implementation is based on [react-native-calendars](https://github.com/wix/react-native-calendars) ⚠️
+<img src="https://user-images.githubusercontent.com/92979717/231693283-a136ee68-38a5-4c2e-9911-4609e885cc05.gif" 
+width="50%" />
 
-## Features 🔆
+⚠️ Implementation is based on [react-native-calendars](https://github.com/wix/react-native-calendars) ⚠️ 
+
+
+## 🔆 Features 
 
 - Date marking for dots, period, and blocked dates
 - Localization with [date-fns internationalization](https://date-fns.org/v2.0.0-alpha.18/docs/I18n)
 - Accessibility support
 - Custom theming
 
-## Installation 🚀
+## 🚀 Installation 
 
 The package can be installed via [npm](https://github.com/npm/cli):
 
@@ -27,7 +31,7 @@ Or via [yarn](https://github.com/yarnpkg/yarn):
 yarn add rn-kalender
 ```
 
-## Example
+## 🦖 Example
 
 ```js
 import * as React from 'react';
@@ -79,7 +83,7 @@ function App(): JSX.Element {
 export default App;
 ```
 
-## Theming 🎨
+## 🎨 Theming 
 
 | category | key                    | value                                                  |
 | -------- | ---------------------- | ------------------------------------------------------ |
