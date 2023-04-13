@@ -7,7 +7,8 @@
 
 import * as React from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { Kalender } from './src/index';
+import { Kalender } from 'rn-kalender';
+import en from 'date-fns/locale/en-GB';
 
 function App(): JSX.Element {
   const apple = { key: 'apple', color: '#DE534D', selectedDotColor: 'blue' };
@@ -42,6 +43,7 @@ function App(): JSX.Element {
             { date: '2023-04-25', dots: [apple, mango, banana] },
           ]}
           animateScroll
+          locale={en}
         />
       </SafeAreaView>
     </SafeAreaProvider>
