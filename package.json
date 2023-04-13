@@ -1,6 +1,6 @@
 {
   "name": "rn-kalender",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "React-native calendar component library",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
