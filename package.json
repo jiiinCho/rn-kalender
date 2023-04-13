@@ -11,7 +11,6 @@
     "src",
     "!src/__tests__",
     "lib",
-    "react-navigation",
     "babel.js"
   ],
   "sideEffects": false,
