@@ -113,7 +113,6 @@ const CalendarHeader = ({
 }: CalendarHeaderProps) => {
   const style = React.useRef(styles(theme));
 
-  // TODO: Test arrowsHitSlop
   const hitSlop = React.useMemo(
     () =>
       typeof arrowsHitSlop === 'number'

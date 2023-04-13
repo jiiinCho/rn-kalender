@@ -95,7 +95,6 @@ const Day = React.memo(
           borderColor,
         });
 
-        // TODO: insert consumer styles
         if (start && !end) {
           containerStyle.push(style.current.periodStart);
         } else if (!start && end) {

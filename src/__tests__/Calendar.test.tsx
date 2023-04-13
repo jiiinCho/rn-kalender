@@ -97,8 +97,6 @@ describe('month days', () => {
 
     expect(onDayPress).toHaveBeenCalledWith('2023-01-15');
   });
-
-  // TODO: it('should grey out dates not in interval between `minDate` and `maxDate`, () => {})
 });
 
 describe('Accessibility labels', () => {
@@ -111,13 +109,3 @@ describe('Accessibility labels', () => {
     );
   });
 });
-
-/* TODO: 
-describe('Gesture Recognizer', () => {
-  it('should not have `GestureRecognizer` root view by default', () => {});
-  it('should have `GestureRecognizer` root view with `enableSwipeMonths={true}` prop', () => {});
-  it('should not have `GestureRecognizer` root view with `enableSwipeMonths={false}` prop', () => {});
-  it('should go forward on left swipe', () => {});
-  it('should go back on right swipe', () => {});
-});
-*/

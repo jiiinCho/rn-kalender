@@ -58,8 +58,7 @@ type FlatListItem = {
   month: Date;
   key: string;
 };
-// TODO: minDate & maxDate instead of pastScrollRange & futureScrollRange
-// CalendarList only for vertical scroll?
+
 const CalendarList = forwardRef<CalendarListImperativeMethods, Props>(
   (props: CalendarListProps, ref) => {
     const {
@@ -90,7 +89,7 @@ const CalendarList = forwardRef<CalendarListImperativeMethods, Props>(
       pagingEnabled = false,
       scrollEnabled = true,
       nestedScrollEnabled = true,
-      scrollsToTop = false, // TODO: Fix description, default is false
+      scrollsToTop = false,
       keyboardShouldPersistTaps,
       onScrollBeginDrag,
       onScrollEndDrag,
@@ -118,12 +117,6 @@ const CalendarList = forwardRef<CalendarListImperativeMethods, Props>(
       return [style.current.container, propsStyle];
     }, [propsStyle]);
 
-    /**
-     * Range:
-     * in horizontal scroll, the calendar will render previous 1 months and next 1 months
-     * in vertical scroll, the calender will render previous 3 month and next 3 months
-     * this is for lazy loading
-     */
     const range = React.useRef(horizontal ? 1 : 3);
     const items = React.useMemo<FlatListItem[]>(() => {
       const months = [];
@@ -135,9 +128,6 @@ const CalendarList = forwardRef<CalendarListImperativeMethods, Props>(
 
       return months;
     }, [pastScrollRange, futureScrollRange, initialDate]);
-
-    // TODO: [feat] add months on refresh
-    // const [calendarMonths, setCalenderMonths] = React.useState<FlatListItem[]>(items);
 
     const initialDateIndex = React.useMemo<number>(() => {
       return findIndex(items, function ({ month }) {
@@ -329,12 +319,6 @@ const CalendarList = forwardRef<CalendarListImperativeMethods, Props>(
       ],
     );
 
-    /**
-     * Viewable month
-     * viewabilityConfig.viewAreaCoveragePercentThreshold = 20 means
-     * when FlatList item is visible at least 20% on screen,
-     * onViewableItemsChanged callback will be triggered
-     */
     const viewabilityConfig = React.useRef({
       viewAreaCoveragePercentThreshold: 20,
     });
@@ -359,8 +343,6 @@ const CalendarList = forwardRef<CalendarListImperativeMethods, Props>(
       },
     ]);
 
-    // TODO: [feat] add months on refresh
-    // const [loading, setLoading] = React.useState(false);
     return (
       <View testID={testID}>
         <FlatList
@@ -390,35 +372,6 @@ const CalendarList = forwardRef<CalendarListImperativeMethods, Props>(
           onMomentumScrollEnd={onMomentumScrollEnd}
           onScrollBeginDrag={onScrollBeginDrag}
           onScrollEndDrag={onScrollEndDrag}
-          // onRefresh={() => {
-          //   setLoading(true);
-          //   const currentMontClone = new Date(currentMonth);
-          //   setCalenderMonths((previousMonths) => {
-          //     const initialMonthItem = previousMonths[0].month;
-          //     const initialMonth = initialMonthItem.getUTCMonth();
-
-          //     const m1 = new Date(initialMonthItem);
-          //     const m2 = new Date(initialMonthItem);
-          //     const m3 = new Date(initialMonthItem);
-          //     m1.setUTCMonth(initialMonth - 1);
-          //     m2.setUTCMonth(initialMonth - 2);
-          //     m3.setUTCMonth(initialMonth - 3);
-
-          //     const updated1: FlatListItem = { month: m1, key: m1.getTime().toString() };
-          //     const updated2: FlatListItem = { month: m2, key: m2.getTime().toString() };
-          //     const updated3: FlatListItem = { month: m3, key: m3.getTime().toString() };
-          //     return [updated3, updated2, updated1, ...previousMonths];
-          //   });
-
-          //   const scrollAmount = calendarSize * pastScrollRange + -3 * calendarSize;
-          //   list.current?.scrollToOffset({ offset: scrollAmount, animated: false });
-
-          //   visibleMonth.current = currentMontClone; // update ref value
-          //   setCurrentMonth(visibleMonth.current); // re-render?
-
-          //   setLoading(false);
-          // }}
-          // refreshing={loading}
         />
         {renderStaticHeader()}
       </View>

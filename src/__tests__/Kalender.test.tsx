@@ -60,8 +60,6 @@ describe('props', () => {
     const found = todayElementStyle.find(({ color }: any) => color === todayColor);
     expect(found).not.toBeUndefined();
   });
-
-  // TODO: it('should mark selected day', () => {});
 });
 
 describe('Accessibility labels', () => {
@@ -151,6 +149,4 @@ describe('Accessibility labels', () => {
       'söndag 22 januari 2023 period end',
     );
   });
-
-  // TODO: it('should have correct label for selected date', () => {});
 });

@@ -13,7 +13,7 @@ export default function styles(theme: Theme = {}) {
       alignItems: 'center',
       paddingBottom: 8,
       paddingTop: dayLayout.headerTopMargin,
-      marginLeft: 4, // TODO: check
+      marginLeft: 4,
     },
     headerContainer: {
       flexDirection: 'row',

@@ -114,12 +114,10 @@ export function page(date: Date, firstDayOfWeek = 0, showSixWeeks = false) {
   return before.concat(days.slice(1, days.length - 1), after);
 }
 
-// TODO: Check if it breaks
 export function isLTE(a: Date, b: Date) {
   return differenceInDays(a, b) > -1;
 }
 
-// TODO: Check if it breaks
 export function isGTE(a: Date, b: Date) {
   return differenceInDays(b, a) > -1;
 }
